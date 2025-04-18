@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 5px;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #e67e22;
+            font-size: 24px;
+            margin: 8px 0;
+            font-weight: 600;
+        }
+
+        .section-title {
+            color: #e67e22;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin: 5px 0 12px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .reminder-alert {
+            background-color: #fef9e7;
+            border-left: 4px solid #e67e22;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .reminder-time {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .qr-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .qr-code {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .activation-code {
+            margin-top: 12px;
+            font-size: 16px;
+        }
+
+        .code-label {
+            color: #666;
+        }
+
+        .code-value {
+            color: #e67e22;
+            font-weight: bold;
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        .info-content {
+            text-align: center;
+        }
+
+        .bank-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            margin: 0 auto 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .bank-logo img {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .info-row {
+            margin: 6px 0;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #333;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .value {
+            color: #444;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #e67e22;
+            color: white !important;
+            text-decoration: none !important;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .button-section {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+
+        @media only screen and (max-width: 480px) {
+            .container {
+                padding: 12px 8px;
+            }
+
+            .card {
+                padding: 12px;
+            }
+
+            .section-title {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Appointment Reminder</h1>
+    </div>
+
+    <div class="card">
+        <div class="reminder-alert">
+            <p><strong>Hello {{customerName}},</strong></p>
+            <p>This is a reminder that your appointment is scheduled in <span class="reminder-time">30 minutes</span>.</p>
+            <p>We look forward to seeing you at {{bankName}} ({{branchName}}) for your appointment at <span class="reminder-time">{{formattedTime}}</span>.</p>
+        </div>
+
+        <div class="qr-section">
+            <h3 class="qr-title">Quick Access</h3>
+            <div class="qr-code">
+                <img src="cid:qr-code" alt="QR Activation Code" style="max-width: 100%;" />
+            </div>
+            <div class="activation-code">
+                <span class="code-label">Activation Code: </span>
+                <span class="code-value">{{password}}</span>
+            </div>
+            <div class="button-section">
+                <a href="{{cancelUrl}}" class="button">Manage Appointment</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="section-title">Bank Information</h3>
+        <div class="info-content">
+            {{#if logoPath}}
+            <div class="bank-logo">
+                <img src="cid:bank-logo" alt="{{bankName}} logo" />
+            </div>
+            {{/if}}
+            <div class="info-row"><strong>{{bankName}}</strong></div>
+            <div class="info-row">{{branchName}}</div>
+            <div class="info-row">{{branchAddress}}</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="section-title">Appointment Details</h3>
+        <div class="info-content">
+            <div class="info-row">
+                <span class="label">Date:</span>
+                <span class="value">{{formattedDate}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Time:</span>
+                <span class="value">{{formattedTime}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Client Type:</span>
+                <span class="value">{{entityType}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Service Type:</span>
+                <span class="value">{{serviceDescription}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="section-title">Your Information</h3>
+        <div class="info-content">
+            {{#if companyName}}
+            <div class="info-row">
+                <span class="label">Company:</span>
+                <span class="value">{{companyName}}</span>
+            </div>
+            {{/if}}
+            <div class="info-row">
+                <span class="label">Name:</span>
+                <span class="value">{{customerName}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{phoneNumber}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Email:</span>
+                <span class="value">{{email}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Thank you for choosing our services!</p>
+        <p>Best Regards,<br/>The {{bankName}} Team</p>
+    </div>
+</div>
+</body>
+</html>
